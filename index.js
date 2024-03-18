@@ -22,13 +22,15 @@ app.all('/',(req,res)=>{
 
 
 
-app.get('/cars', async (req, res) => {
-    try {
-      const cars = await Car.find(); // Tüm arabaları çek
-      res.json(cars); // Araba listesini JSON formatında döndür
-    } catch (err) {
-      res.status(500).send({ message: err.message }); // Hata durumunda 500 durum kodu ile hata mesajını döndür
-    }
-  });
+// app.get('/cars', async (req, res) => {
+//     try {
+//       const cars = await Car.find(); // Tüm arabaları çek
+//       res.json(cars); // Araba listesini JSON formatında döndür
+//     } catch (err) {
+//       res.status(500).send({ message: err.message }); // Hata durumunda 500 durum kodu ile hata mesajını döndür
+//     }
+//   });
+
+app.use('/cars', require('./src/routes/cars.router'));
 
 app.listen(PORT,()=> console.log(` Server Running on http://${HOST}:${PORT}`))

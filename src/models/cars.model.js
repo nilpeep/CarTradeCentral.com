@@ -1,5 +1,7 @@
+const mongoose = require('mongoose')
+
 const carSchema = new mongoose.Schema({
-    _id: mongoose.Schema.Types.ObjectId,
+    // _id: mongoose.Schema.Types.ObjectId,
     car_make: String,
     car_model: String,
     car_year: Number,
