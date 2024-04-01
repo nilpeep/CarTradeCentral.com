@@ -1,36 +1,71 @@
-"use strict";
+"use strict"
+/* -------------------------------------------------------
+    NODEJS EXPRESS | CLARUSWAY FullStack Team
+------------------------------------------------------- */
 const express = require('express')
 const app = express()
 
-/* DB connection  */
+/* ------------------------------------------------------- */
+// Required Modules:
 
-const mongoose = require('mongoose')
+// envVariables to process.env:
+require('dotenv').config()
+const HOST = process.env?.HOST || '127.0.0.1'
+const PORT = process.env?.PORT || 8000
 
-const MONGODB = process.env.MONGO
+// asyncErrors to errorHandler:
+require('express-async-errors')
 
-mongoose.connect('mongodb://localhost:27017/sahibinden')
-.then(()=> console.log('mongoDB connected'))
-.catch((err)=> console.log(err))
+/* ------------------------------------------------------- */
+// Configrations:
 
+// Connect to DB:
+const { dbConnection } = require('./src/configs/dbConnection')
+dbConnection()
 
-const PORT=8000
-const HOST="localhost"
+/* ------------------------------------------------------- */
+// Middlewares:
 
-app.all('/',(req,res)=>{
-    res.send('welcome')
+// Accept JSON:
+app.use(express.json())
+
+// Check Authentication:
+app.use(require('./src/middlewares/authentication'))
+
+// Run Logger:
+app.use(require('./src/middlewares/logger'))
+
+// res.getModelList():
+app.use(require('./src/middlewares/findSearchSortPage'))
+
+/* ------------------------------------------------------- */
+// Routes:
+
+// HomePath:
+app.all('/', (req, res) => {
+    res.send({
+        error: false,
+        message: 'Welcome to RENT A CAR API',
+        documents: {
+            swagger: '/documents/swagger',
+            redoc: '/documents/redoc',
+            json: '/documents/json',
+        },
+        user: req.user
+    })
 })
 
+// Routes:
+app.use(require('./src/routes'))
 
+/* ------------------------------------------------------- */
 
-// app.get('/cars', async (req, res) => {
-//     try {
-//       const cars = await Car.find(); // Tüm arabaları çek
-//       res.json(cars); // Araba listesini JSON formatında döndür
-//     } catch (err) {
-//       res.status(500).send({ message: err.message }); // Hata durumunda 500 durum kodu ile hata mesajını döndür
-//     }
-//   });
+// errorHandler:
+app.use(require('./src/middlewares/errorHandler'))
 
-app.use('/cars', require('./src/routes/cars.router'));
+// RUN SERVER:
+app.listen(PORT, HOST, () => console.log(`http://${HOST}:${PORT}`))
 
-app.listen(PORT,()=> console.log(` Server Running on http://${HOST}:${PORT}`))
+/* ------------------------------------------------------- */
+// Syncronization (must be in commentLine):
+// require('./src/helpers/sync')()
