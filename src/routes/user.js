@@ -19,7 +19,7 @@ router.route('/:id')
     .get(permissions.isLogin, user.read)
     .put(permissions.isLogin, user.update)
     .patch(permissions.isLogin,user.update)
-    .delete(permissions.isStaff, user.delete)
+    .delete(permissions.isAdmin, user.delete)
 
 /* ------------------------------------------------------- */
 module.exports = router
