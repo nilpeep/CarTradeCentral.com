@@ -26,11 +26,11 @@ module.exports = {
             }
         */
 
-        const { username, password } = req.body
+        const { username, password, email } = req.body
 
-        if (username && password) {
+        if ((username || email) && password) {
 
-            const user = await User.findOne({ username })
+            const user = await User.findOne({ $or: [{ username }, { email }] })
 
             if (user && user.password == passwordEncrypt(password)) {
 
