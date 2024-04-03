@@ -27,7 +27,8 @@ const { mongoose } = require('../configs/dbConnection')
     "year": 2021,
     "isAutomatic": false,
     "pricePerDay": 189.99,
-    "isPublish": false
+    "isPublish": false,
+    "isAvailable":false
 }
 /* ------------------------------------------------------- */
 // Car Model:

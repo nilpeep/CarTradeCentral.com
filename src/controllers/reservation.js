@@ -43,6 +43,17 @@ module.exports = {
                 }
             }
         */
+
+
+        if((!req.user.isAdmin && !req.user.isStaff) || !req.body?.userId){
+            req.body.userId = req.user._id
+        }else{
+
+        }
+
+        req.body.createdId = req.user._id
+        req.body.updatedId = req.user._id
+
         const data = await Reservation.create(req.body)
 
         res.status(201).send({
